@@ -1,13 +1,16 @@
 # main.py
-from my_speech_recognition.listener import listen
-from speech_synthesis.speaker import speak
+from my_speech_recognition import listen, choose_microphone
+from speech_synthesis import speak
 from command_processing.processor import process_command
 
 def main():
     try:
+        mic_name, mic_index = choose_microphone()  # Let the user choose the microphone
+        print(f"Selected microphone: {mic_name}")
+
         while True:
-            # Listen for commands
-            command = listen()
+            # Use the selected microphone for listening
+            command = listen(device=mic_index)
             print(f"Command received: {command}")
 
             # Process command
