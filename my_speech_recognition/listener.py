@@ -1,17 +1,20 @@
+
 import sounddevice as sd
 import numpy as np
 import speech_recognition as sr
 
-def listen(duration=5, samplerate=44100):
-    # Capture audio
+def listen(duration=5, samplerate=44100, device=None):
     print("Listening...")
-    recording = sd.rec(int(duration * samplerate), samplerate=samplerate, channels=2, dtype='int16')
+    recording = sd.rec(int(duration * samplerate), samplerate=samplerate, channels=2, dtype='int16', device=device)
     sd.wait()  # Wait for the recording to finish
 
-    # Convert the NumPy array to audio data
-    audio_data = np.frombuffer(recording, dtype=np.int16)
+    # Playback the recorded audio
+    print("Playing back the recorded audio...")
+    sd.play(recording, samplerate)
+    sd.wait()  # Wait for the playback to finish
 
-    # Initialize speech recognition
+    # Convert the NumPy array to audio data for speech recognition
+    audio_data = np.frombuffer(recording, dtype=np.int16)
     recognizer = sr.Recognizer()
     audio = sr.AudioData(audio_data.tobytes(), samplerate, 2)
 
